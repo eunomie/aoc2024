@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/eunomie/aoc2024/inputs"
+	"github.com/eunomie/aoc2024/sugar"
 )
 
 func main() {
@@ -20,7 +21,7 @@ func d02(inputStr string, skip bool) int {
 			safeReports++
 		} else if skip {
 			for i := 0; i < len(levels); i++ {
-				safe = isSafe(arrayMinus(levels, i))
+				safe = isSafe(sugar.FilterIndex(levels, i))
 				if safe {
 					safeReports++
 					break
@@ -30,16 +31,6 @@ func d02(inputStr string, skip bool) int {
 	}
 
 	return safeReports
-}
-
-func arrayMinus(arr []int, idx int) []int {
-	var res []int
-	for i, a := range arr {
-		if i != idx {
-			res = append(res, a)
-		}
-	}
-	return res
 }
 
 func isSafe(levels []int) bool {
@@ -58,7 +49,7 @@ func isSafe(levels []int) bool {
 	} else {
 		direction = Dec
 	}
-	d = abs(d)
+	d = sugar.Abs(d)
 	if d < 1 || d > 3 {
 		return false
 	}
@@ -69,7 +60,7 @@ func isSafe(levels []int) bool {
 			safe = false
 			break
 		}
-		d = abs(d)
+		d = sugar.Abs(d)
 		if d < 1 || d > 3 {
 			safe = false
 			break
@@ -77,11 +68,4 @@ func isSafe(levels []int) bool {
 		n = v
 	}
 	return safe
-}
-
-func abs(n int) int {
-	if n < 0 {
-		return -n
-	}
-	return n
 }
