@@ -2,6 +2,7 @@ package sugar
 
 import (
 	"golang.org/x/exp/constraints"
+	"strconv"
 )
 
 type Number interface {
@@ -54,4 +55,12 @@ func IfFunc[T any](cond bool, a, b func() T) T {
 		return a()
 	}
 	return b()
+}
+
+func MustAtoi(a string) int {
+	v, err := strconv.Atoi(a)
+	if err != nil {
+		panic(err)
+	}
+	return v
 }
