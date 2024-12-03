@@ -1,8 +1,10 @@
 package sugar
 
 import (
-	"golang.org/x/exp/constraints"
+	"slices"
 	"strconv"
+
+	"golang.org/x/exp/constraints"
 )
 
 type Number interface {
@@ -63,4 +65,10 @@ func MustAtoi(a string) int {
 		panic(err)
 	}
 	return v
+}
+
+func Reverse[S ~[]E, E any](s S) S {
+	c := slices.Clone(s)
+	slices.Reverse(c)
+	return c
 }

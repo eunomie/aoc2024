@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"slices"
+
 	"github.com/eunomie/aoc2024/inputs"
 	"github.com/eunomie/aoc2024/sugar"
 )
@@ -34,38 +36,17 @@ func d02(inputStr string, skip bool) int {
 }
 
 func isSafe(levels []int) bool {
-	type Direction int
-	const (
-		None Direction = iota
-		Inc
-		Dec
-	)
-	safe := true
-	direction := None
-	n := levels[1]
-	d := n - levels[0]
-	if d > 0 {
-		direction = Inc
-	} else {
-		direction = Dec
-	}
-	d = sugar.Abs(d)
-	if d < 1 || d > 3 {
+	if !slices.IsSorted(levels) && !slices.IsSorted(sugar.Reverse(levels)) {
 		return false
 	}
-	for i := 2; i < len(levels); i++ {
+	n := levels[0]
+	for i := 1; i < len(levels); i++ {
 		v := levels[i]
-		d = v - n
-		if d > 0 && direction == Dec || d < 0 && direction == Inc {
-			safe = false
-			break
-		}
-		d = sugar.Abs(d)
+		d := sugar.Abs(v - n)
 		if d < 1 || d > 3 {
-			safe = false
-			break
+			return false
 		}
 		n = v
 	}
-	return safe
+	return true
 }
