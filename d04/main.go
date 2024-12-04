@@ -15,23 +15,20 @@ func main() {
 func d04p1(input string) int {
 	var res int
 	const xmas = "XMAS"
+	const samx = "SAMX"
 
 	board := sugar.NewBoard(input)
 
 	res += board.CountNonOverlapping(xmas)
+	res += board.CountNonOverlapping(samx)
 	res += board.CountNonOverlappingInDiagonal(xmas)
+	res += board.CountNonOverlappingInDiagonal(samx)
 
 	board = board.Pivot()
 	res += board.CountNonOverlapping(xmas)
+	res += board.CountNonOverlapping(samx)
 	res += board.CountNonOverlappingInDiagonal(xmas)
-
-	board = board.Pivot()
-	res += board.CountNonOverlapping(xmas)
-	res += board.CountNonOverlappingInDiagonal(xmas)
-
-	board = board.Pivot()
-	res += board.CountNonOverlapping(xmas)
-	res += board.CountNonOverlappingInDiagonal(xmas)
+	res += board.CountNonOverlappingInDiagonal(samx)
 
 	return res
 }

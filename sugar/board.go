@@ -7,10 +7,11 @@ import (
 
 type (
 	Board struct {
-		input    string
-		nbLines  int
-		nbCols   int
-		lenInput int
+		input     string
+		diagonals string
+		nbLines   int
+		nbCols    int
+		lenInput  int
 	}
 
 	Rune struct {
@@ -105,7 +106,11 @@ func (b *Board) Pivot() *Board {
 }
 
 func (b *Board) Diagonals() string {
-	return Diagonals(b.input)
+	if b.diagonals != "" {
+		return b.diagonals
+	}
+	b.diagonals = Diagonals(b.input)
+	return b.diagonals
 }
 
 func (r Rune) String() string {
