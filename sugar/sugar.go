@@ -84,6 +84,16 @@ func StringReverse(s string) string {
 	return string(runes)
 }
 
+func StringEqualOrReverse(s, eq string) bool {
+	if s == eq {
+		return true
+	}
+	if StringReverse(s) == eq {
+		return true
+	}
+	return false
+}
+
 func PivotString(s string) string {
 	lines := strings.Split(s, "\n")
 	nbLines := len(lines)
