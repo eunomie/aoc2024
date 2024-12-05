@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"slices"
+
 	"github.com/eunomie/aoc2024/inputs"
 	"github.com/eunomie/aoc2024/sugar"
-	"slices"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func d01p1(inputStr string) int {
 	var l1, l2 []int
 	lines := inputs.Lines(inputStr)
 	for _, line := range lines {
-		values := inputs.Numbers(line)
+		values := inputs.Numbers(line, " ")
 		i1, i2 := values[0], values[1]
 		l1 = append(l1, i1)
 		l2 = append(l2, i2)
@@ -41,7 +42,7 @@ func d01p2(inputStr string) int {
 	l2 := map[int]int{}
 	lines := inputs.Lines(inputStr)
 	for _, line := range lines {
-		values := inputs.Numbers(line)
+		values := inputs.Numbers(line, " ")
 		i1, i2 := values[0], values[1]
 		l1 = append(l1, i1)
 		l2[i2]++

@@ -17,7 +17,7 @@ func d02(inputStr string, skip bool) int {
 	safeReports := 0
 	reports := inputs.Lines(inputStr)
 	for _, report := range reports {
-		levels := inputs.Numbers(report)
+		levels := inputs.Numbers(report, " ")
 		safe := isSafe(levels)
 		if safe {
 			safeReports++

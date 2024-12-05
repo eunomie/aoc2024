@@ -9,9 +9,9 @@ func Lines(inputStr string) []string {
 	return strings.Split(inputStr, "\n")
 }
 
-func Numbers(inputStr string) []int {
+func Numbers(inputStr, sep string) []int {
 	var res []int
-	for _, nStr := range strings.Split(inputStr, " ") {
+	for _, nStr := range strings.Split(inputStr, sep) {
 		if nStr == "" {
 			continue
 		}
