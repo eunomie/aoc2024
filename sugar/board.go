@@ -57,6 +57,10 @@ func (b *Board) newRune(pos int) Rune {
 	}
 }
 
+func (b *Board) Input() string {
+	return b.input
+}
+
 func (b *Board) NumLines() int {
 	return b.nbLines
 }
@@ -77,6 +81,10 @@ func (b *Board) GetRune(col, line int) Rune {
 	return b.newRune(pos)
 }
 
+func (b *Board) GetRuneAt(pos int) Rune {
+	return b.newRune(pos)
+}
+
 func (b *Board) GetLine(line int) string {
 	return b.input[line*(b.nbCols+1) : (line+1)*b.nbCols]
 }
@@ -90,6 +98,14 @@ func (b *Board) ForEachRunes(fn func(Rune), runes ...rune) {
 			fn(b.newRune(i))
 		}
 	}
+}
+
+func (b *Board) Find(r rune) Rune {
+	idx := strings.Index(b.input, string(r))
+	if idx == -1 {
+		return b.emptyRune()
+	}
+	return b.newRune(idx)
 }
 
 func (b *Board) CountNonOverlapping(s string) int {
@@ -113,11 +129,19 @@ func (b *Board) Diagonals() string {
 	return b.diagonals
 }
 
+func (b *Board) Write(i int, n rune) {
+	b.newRune(i).Write(n)
+}
+
 func (r Rune) String() string {
 	if r.pos == -1 {
 		return ""
 	}
 	return string(r.rune)
+}
+
+func (r Rune) Is(c ...rune) bool {
+	return slices.Contains(c, r.rune)
 }
 
 func (r Rune) Top() Rune {
@@ -150,4 +174,18 @@ func (r Rune) Left() Rune {
 
 func (r Rune) TopLeft() Rune {
 	return r.board.GetRune(r.col-1, r.line-1)
+}
+
+func (r Rune) Index() int {
+	return r.pos
+}
+
+func (r Rune) Write(n rune) {
+	runes := []rune(r.board.input)
+	runes[r.pos] = n
+	r.board.input = string(runes)
+}
+
+func (r Rune) IsEmpty() bool {
+	return r.pos == -1
 }
