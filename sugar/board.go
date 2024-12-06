@@ -7,7 +7,7 @@ import (
 
 type (
 	Board struct {
-		input     string
+		input     []rune
 		diagonals string
 		nbLines   int
 		nbCols    int
@@ -28,7 +28,7 @@ func NewBoard(input string) *Board {
 	nbLines := strings.Count(input, "\n") + 1
 
 	return &Board{
-		input:    input,
+		input:    []rune(input),
 		nbLines:  nbLines,
 		nbCols:   nbCols,
 		lenInput: len(input),
@@ -58,7 +58,11 @@ func (b *Board) newRune(pos int) Rune {
 }
 
 func (b *Board) Input() string {
-	return b.input
+	return string(b.input)
+}
+
+func (b *Board) String() string {
+	return string(b.input)
 }
 
 func (b *Board) NumLines() int {
@@ -86,7 +90,7 @@ func (b *Board) GetRuneAt(pos int) Rune {
 }
 
 func (b *Board) GetLine(line int) string {
-	return b.input[line*(b.nbCols+1) : (line+1)*b.nbCols]
+	return string(b.input[line*(b.nbCols+1) : (line+1)*b.nbCols])
 }
 
 func (b *Board) ForEachRunes(fn func(Rune), runes ...rune) {
@@ -101,15 +105,16 @@ func (b *Board) ForEachRunes(fn func(Rune), runes ...rune) {
 }
 
 func (b *Board) Find(r rune) Rune {
-	idx := strings.Index(b.input, string(r))
-	if idx == -1 {
-		return b.emptyRune()
+	for i, c := range b.input {
+		if c == r {
+			return b.newRune(i)
+		}
 	}
-	return b.newRune(idx)
+	return b.emptyRune()
 }
 
 func (b *Board) CountNonOverlapping(s string) int {
-	return strings.Count(b.input, s)
+	return strings.Count(b.Input(), s)
 }
 
 func (b *Board) CountNonOverlappingInDiagonal(s string) int {
@@ -117,7 +122,7 @@ func (b *Board) CountNonOverlappingInDiagonal(s string) int {
 }
 
 func (b *Board) Pivot() *Board {
-	p := PivotString(b.input)
+	p := PivotString(b.String())
 	return NewBoard(p)
 }
 
@@ -125,12 +130,12 @@ func (b *Board) Diagonals() string {
 	if b.diagonals != "" {
 		return b.diagonals
 	}
-	b.diagonals = Diagonals(b.input)
+	b.diagonals = Diagonals(b.String())
 	return b.diagonals
 }
 
 func (b *Board) Write(i int, n rune) {
-	b.newRune(i).Write(n)
+	b.input[i] = n
 }
 
 func (r Rune) String() string {
@@ -181,9 +186,7 @@ func (r Rune) Index() int {
 }
 
 func (r Rune) Write(n rune) {
-	runes := []rune(r.board.input)
-	runes[r.pos] = n
-	r.board.input = string(runes)
+	r.board.input[r.pos] = n
 }
 
 func (r Rune) IsEmpty() bool {

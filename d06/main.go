@@ -69,8 +69,6 @@ func positions(input string) map[int]bool {
 				continue
 			}
 			visitedPositions[nextPos.Index()] = true
-			nextPos.Write(guardUp)
-			gPos.Write(empty)
 			gPos = nextPos
 		case DirRight:
 			nextPos := gPos.Right()
@@ -82,8 +80,6 @@ func positions(input string) map[int]bool {
 				continue
 			}
 			visitedPositions[nextPos.Index()] = true
-			nextPos.Write(guardRight)
-			gPos.Write(empty)
 			gPos = nextPos
 		case DirDown:
 			nextPos := gPos.Bottom()
@@ -95,8 +91,6 @@ func positions(input string) map[int]bool {
 				continue
 			}
 			visitedPositions[nextPos.Index()] = true
-			nextPos.Write(guardLeft)
-			gPos.Write(empty)
 			gPos = nextPos
 		case DirLeft:
 			nextPos := gPos.Left()
@@ -108,8 +102,6 @@ func positions(input string) map[int]bool {
 				continue
 			}
 			visitedPositions[nextPos.Index()] = true
-			nextPos.Write(guardUp)
-			gPos.Write(empty)
 			gPos = nextPos
 		}
 	}
@@ -120,7 +112,6 @@ END:
 
 func d06p2(input string) int {
 	allPos := positions(input)
-	l := len(allPos)
 
 	initialBoard := sugar.NewBoard(input)
 	var initialRune sugar.Rune
@@ -139,20 +130,15 @@ func d06p2(input string) int {
 	initialPosition := initialRune.Index()
 
 	var res atomic.Int32
-	var i atomic.Int32
 
 	eg := errgroup.Group{}
-	eg.SetLimit(100)
+	eg.SetLimit(10)
 
 	for p, _ := range allPos {
 		if p == initialPosition {
-			i.Add(1)
-			fmt.Println(i.Load(), "/", l, "(skipped)")
 			continue
 		}
 		eg.Go(func() error {
-			i.Add(1)
-			fmt.Println(i.Load(), "/", l)
 			board := sugar.NewBoard(input)
 			board.Write(p, obstruction)
 			gPos := board.GetRuneAt(initialPosition)
@@ -168,12 +154,9 @@ func d06p2(input string) int {
 					if nextPos.IsEmpty() {
 						goto END
 					}
-					if nextPos.Is(obstacle, obstruction) {
+					if nextPos.Is(obstacle) || nextPos.Index() == p {
 						dir = DirRight
-						gPos.Write(guardRight)
 					} else {
-						nextPos.Write(guardUp)
-						gPos.Write(empty)
 						gPos = nextPos
 					}
 				case DirRight:
@@ -181,12 +164,9 @@ func d06p2(input string) int {
 					if nextPos.IsEmpty() {
 						goto END
 					}
-					if nextPos.Is(obstacle, obstruction) {
+					if nextPos.Is(obstacle) || nextPos.Index() == p {
 						dir = DirDown
-						gPos.Write(guardDown)
 					} else {
-						nextPos.Write(guardRight)
-						gPos.Write(empty)
 						gPos = nextPos
 					}
 				case DirDown:
@@ -194,12 +174,9 @@ func d06p2(input string) int {
 					if nextPos.IsEmpty() {
 						goto END
 					}
-					if nextPos.Is(obstacle, obstruction) {
+					if nextPos.Is(obstacle) || nextPos.Index() == p {
 						dir = DirLeft
-						gPos.Write(guardLeft)
 					} else {
-						nextPos.Write(guardDown)
-						gPos.Write(empty)
 						gPos = nextPos
 					}
 				case DirLeft:
@@ -207,12 +184,9 @@ func d06p2(input string) int {
 					if nextPos.IsEmpty() {
 						goto END
 					}
-					if nextPos.Is(obstacle, obstruction) {
+					if nextPos.Is(obstacle) || nextPos.Index() == p {
 						dir = DirUp
-						gPos.Write(guardUp)
 					} else {
-						nextPos.Write(guardLeft)
-						gPos.Write(empty)
 						gPos = nextPos
 					}
 				}
