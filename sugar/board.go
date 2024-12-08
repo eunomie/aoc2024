@@ -104,6 +104,17 @@ func (b *Board) ForEachRunes(fn func(Rune), runes ...rune) {
 	}
 }
 
+func (b *Board) ForEachRunesNot(fn func(Rune), runes ...rune) {
+	for i, c := range b.input {
+		if c == '\n' {
+			continue
+		}
+		if !slices.Contains(runes, c) {
+			fn(b.newRune(i))
+		}
+	}
+}
+
 func (b *Board) Find(r rune) Rune {
 	for i, c := range b.input {
 		if c == r {
@@ -145,8 +156,20 @@ func (r Rune) String() string {
 	return string(r.rune)
 }
 
+func (r Rune) Rune() rune {
+	return r.rune
+}
+
 func (r Rune) Is(c ...rune) bool {
 	return slices.Contains(c, r.rune)
+}
+
+func (r Rune) Move(col, line int) Rune {
+	return r.board.GetRune(r.col+col, r.line+line)
+}
+
+func (r Rune) Diff(o Rune) (int, int) {
+	return o.col - r.col, o.line - r.line
 }
 
 func (r Rune) Top() Rune {
