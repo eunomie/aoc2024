@@ -35,6 +35,22 @@ func NewBoard(input string) *Board {
 	}
 }
 
+func (b *Board) IsolateWithRune(positions []int, r rune) *Board {
+	newRunes := make([]rune, len(b.input))
+	for i, r := range b.input {
+		if r == '\n' {
+			newRunes[i] = r
+		} else {
+			newRunes[i] = '.'
+		}
+	}
+	for _, pos := range positions {
+		newRunes[pos] = r
+	}
+
+	return NewBoard(string(newRunes))
+}
+
 func (b *Board) emptyRune() Rune {
 	return Rune{
 		board: b,
@@ -51,7 +67,7 @@ func (b *Board) newRune(pos int) Rune {
 	return Rune{
 		board: b,
 		pos:   pos,
-		rune:  rune(b.input[pos]),
+		rune:  b.input[pos],
 		col:   pos % (b.nbCols + 1),
 		line:  pos / (b.nbCols + 1),
 	}
@@ -94,11 +110,12 @@ func (b *Board) GetLine(line int) string {
 }
 
 func (b *Board) ForEachRunes(fn func(Rune), runes ...rune) {
+	all := len(runes) == 0
 	for i, c := range b.input {
 		if c == '\n' {
 			continue
 		}
-		if slices.Contains(runes, c) {
+		if all || slices.Contains(runes, c) {
 			fn(b.newRune(i))
 		}
 	}
@@ -149,6 +166,10 @@ func (b *Board) Write(i int, n rune) {
 	b.input[i] = n
 }
 
+func (b *Board) At(pos int) Rune {
+	return b.newRune(pos)
+}
+
 func (r Rune) String() string {
 	if r.pos == -1 {
 		return ""
@@ -161,7 +182,17 @@ func (r Rune) Rune() rune {
 }
 
 func (r Rune) Is(c ...rune) bool {
+	if r.IsEmpty() {
+		return false
+	}
 	return slices.Contains(c, r.rune)
+}
+
+func (r Rune) IsNot(c ...rune) bool {
+	if r.IsEmpty() {
+		return true
+	}
+	return !slices.Contains(c, r.rune)
 }
 
 func (r Rune) Move(col, line int) Rune {

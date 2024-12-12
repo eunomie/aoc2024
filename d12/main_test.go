@@ -1,11 +1,23 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestD12P1(t *testing.T) {
-	input := ``
+	input := `RRRRIICCFF
+RRRRIICCCF
+VVRRRCCFFF
+VVRCCCJFFF
+VVVVCJJCFE
+VVIVCCJJEE
+VVIIICJJEE
+MIIIIIJJEE
+MIIISIJEEE
+MMMISSJEEE`
 
-	expected := 0
+	expected := 1930
 
 	if v := d12p1(input); v != expected {
 		t.Errorf("expcted %v, got %v", expected, v)
@@ -13,11 +25,47 @@ func TestD12P1(t *testing.T) {
 }
 
 func TestD12P2(t *testing.T) {
-	input := ``
+	testCases := []struct {
+		input    string
+		expected int
+	}{
+		{
+			`RRRRIICCFF
+RRRRIICCCF
+VVRRRCCFFF
+VVRCCCJFFF
+VVVVCJJCFE
+VVIVCCJJEE
+VVIIICJJEE
+MIIIIIJJEE
+MIIISIJEEE
+MMMISSJEEE`,
+			1206,
+		},
+		{
+			`EEEEE
+EXXXX
+EEEEE
+EXXXX
+EEEEE`,
+			236,
+		},
+		{
+			`AAAAAA
+AAABBA
+AAABBA
+ABBAAA
+ABBAAA
+AAAAAA`,
+			368,
+		},
+	}
 
-	expected := 0
-
-	if v := d12p2(input); v != expected {
-		t.Errorf("expcted %v, got %v", expected, v)
+	for i, tc := range testCases {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			if v := d12p2(tc.input); v != tc.expected {
+				t.Errorf("expcted %v, got %v", tc.expected, v)
+			}
+		})
 	}
 }
