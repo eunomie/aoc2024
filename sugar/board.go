@@ -246,3 +246,11 @@ func (r Rune) Write(n rune) {
 func (r Rune) IsEmpty() bool {
 	return r.pos == -1
 }
+
+func (r Rune) Col() int {
+	return r.col
+}
+
+func (r Rune) Line() int {
+	return r.line
+}
