@@ -86,6 +86,23 @@ func IntPow(n, m int) int {
 	return result
 }
 
+func Int64Pow(n, m int64) int64 {
+	if m == 0 {
+		return 1
+	}
+
+	if m == 1 {
+		return n
+	}
+
+	result := n
+	var i int64
+	for i = 2; i <= m; i++ {
+		result *= n
+	}
+	return result
+}
+
 func Reverse[S ~[]E, E any](s S) S {
 	c := slices.Clone(s)
 	slices.Reverse(c)
